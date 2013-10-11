@@ -21,9 +21,13 @@ function handler(req, res) {
 }
 
 io.sockets.on("connection", function(socket) {
-	io.sockets.emit("sync", { date: Date(), id: socket.id, text: "entered." });
+	io.sockets.emit("sync", { date: new Date(), id: socket.id, text: "entered." });
 	
 	socket.on("message", function(data) {
-		io.sockets.emit("sync", { date: new Date(), id: socket.id, text: data });
+		io.sockets.emit("sync", { date: "", id: socket.id, text: data });
+	});
+	
+	socket.on("disconnect", function(data) {
+		io.sockets.emit("sync", { date: new Date(), id: socket.id, text: "left." });
 	});
 });
