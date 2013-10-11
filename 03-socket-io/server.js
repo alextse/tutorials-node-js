@@ -1,6 +1,7 @@
 var server = require("http").createServer(handler),
 	io = require("socket.io").listen(server),
-	fs = require("fs");
+	fs = require("fs"),
+	isInit;
 	
 server.listen(1340, "127.0.0.1");
 console.log("listening on port 1340");
@@ -20,7 +21,9 @@ function handler(req, res) {
 }
 
 io.sockets.on("connection", function(socket) {
+	io.sockets.emit("sync", { date: Date(), id: socket.id, text: "entered." });
+	
 	socket.on("message", function(data) {
-		socket.emit("sync", { date: new Date(), id: socket.id, text: data });
+		io.sockets.emit("sync", { date: new Date(), id: socket.id, text: data });
 	});
 });

@@ -2,13 +2,14 @@
 <html>
 <head>
 	<style>
-		#chat { display: flex; justify-content: center; flex-flow: row wrap; }
+		#chat { display: flex; justify-content: center; align-items: center; flex-flow: row wrap; }
+		#chat > * { flex: 1 100%; }
 	</style>
 	<script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
 	<form id="chat">
-		<input type="text" id="input" />
+		<input type="text" id="input" autocomplete="off" />
 		<textarea id="output" rows="20"></textarea>
 	</form>
 	<script>
@@ -20,7 +21,7 @@
 			var socket = io.connect("http://127.0.0.1:1340");
 			socket.on("sync", function(data) {
 				console.log(data);
-				output.innerHTML += data.date + " " + data.id + ": " + data.text;
+				output.innerHTML += data.date + " " + data.id + ": " + data.text + "\n";
 				output.scrollTop = output.scrollHeight;
 			});
 			
