@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+	<style>
+		#chat { display: flex; justify-content: center; flex-flow: row wrap; }
+	</style>
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+	<form id="chat">
+		<input type="text" id="input" />
+		<textarea id="output" rows="20"></textarea>
+	</form>
+	<script>
+		(function() {
+			var output = document.getElementById("output"),
+				chat = document.getElementById("chat"),
+				input = document.getElementById("input");
+			
+			var socket = io.connect("http://127.0.0.1:1340");
+			socket.on("sync", function(data) {
+				console.log(data);
+				output.innerHTML += data.date + " " + data.id + ": " + data.text;
+				output.scrollTop = output.scrollHeight;
+			});
+			
+			chat.addEventListener("submit", function(event) {
+				event.preventDefault();
+				socket.emit("message", input.value);
+				input.value = "";
+			});
+		})();
+	</script>
+</body>
+</html>
